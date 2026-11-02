@@ -1599,7 +1599,8 @@ var LEVELS=[
  take:['Primitiv er en værdi uden formål: `blue-900`. Semantisk er et formål tildelt en værdi: `accent`. Komponent er formålet anvendt ét bestemt sted: `button.primary.background`. Interfacet er resultatet.','En reference er forbindelsen mellem to tokens. Et token, der peger på et andet, har først en værdi, når kæden af referencer ender i en rå værdi.','Rollen kan få en ny værdi, uden at komponenten ændres: `accent` kan pege på `grey-700` i stedet for `blue-900`, og `button.primary.background` peger stadig på `accent`.','I en struktur med flere lag er primitive tokens kun til reference: de sættes ikke direkte på designet. Det gør semantiske tokens og komponent-tokens. Deres navne viser, hvordan og hvor værdien skal bruges.','To lag er et godt sted at starte, når de store designbeslutninger er stabile. Et tredje lag gør senere ændringer lettere, men koster flere tokens og mere vedligehold.','I denne bane har kun primitive tokens en rå værdi. Det er en konvention og ikke en garanti. Læs altid navn og værdi sammen.'],
  /* reading that belongs to the level without being asked as a question */
  cards:['lagAntal','lagHvornaar','alias'],
- /* Six placements build two chains, then one reference is moved.
+ /* Six placements build two chains, then one reference is moved. Chain 1 is built from the bottom, chain 2 from the top
+    (card.padding, space-32, inset; stations/s1.js SEQ), so the layers are not asked in the same order twice.
     Chain 1 is taken from the source as it stands (color.options.blue-900 -> color.decisions.accent -> button.primary.background); the short names are shown
     so that `options` and `decisions` do not give the layer away. Chain 2 is a teaching example made for the game (example:true): the source named in
     `src` supports the principle, not the names. `why` argues from the definition of the layer and never from the article; what the
@@ -1608,9 +1609,9 @@ var LEVELS=[
   {type:'pick',fixed:true,retry:true,tok:'blue-900',val:'#0265dc',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:0,src:'fowler',why:'Navnet siger, hvilken farve det er, og intet om, hvor den bruges. Værdien er rå: en farvekode, ikke en reference. En værdi uden formål er et primitivt token.',srcNote:'I artiklen står tokenet som `color.options.blue-900`.'},
   {type:'pick',fixed:true,retry:true,tok:'accent',val:'{blue-900}',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:1,src:'fowler',why:'Navnet siger, hvad værdien bruges til, og ikke hvilken farve det er. Værdien er en reference til et primitivt token. Et formål, der har fået en værdi, er et semantisk token. Ingen komponent bruger det endnu.',srcNote:'I artiklen: `color.decisions.accent` peger på `{color.options.blue-900}`.'},
   {type:'pick',fixed:true,retry:true,tok:'button.primary.background',val:'{accent}',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:2,src:'fowler',why:'Navnet nævner en bestemt komponent og en bestemt del af den. Værdien er en reference til rollen `accent`. Et formål anvendt ét bestemt sted er et komponent-token. Nu peger komponenten på rollen og rollen på værdien, og derfor får knappen sin farve.',srcNote:'I artiklen: `button.primary.background` peger på `{color.decisions.accent}`.'},
-  {type:'pick',fixed:true,retry:true,example:true,tok:'space-32',val:'32px',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:0,src:'curtis',why:'Lag gælder ikke kun farver. Navnet siger, hvor stor afstanden er, og intet om, hvor den bruges. Værdien er rå. Det er igen et primitivt token.',srcNote:'Nathan Curtis kalder sådanne tokens generiske. Hans eget eksempel er `$esds-space-2-x` for 32 px.'},
-  {type:'pick',fixed:true,retry:true,example:true,tok:'inset',val:'{space-32}',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:1,src:'figmaTokens',why:'`inset` er afstanden mellem en flades kant og dens indhold. Navnet siger, hvad afstanden bruges til, ikke hvor stor den er, og værdien er en reference. Det er et semantisk token. `inset` er ét eksempel på et rollenavn, ikke en standard.'},
-  {type:'pick',fixed:true,retry:true,example:true,tok:'card.padding',val:'{inset}',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:2,src:'fowler',why:'Navnet nævner en komponent og en egenskab ved den, og værdien er en reference til rollen `inset`. Det er et komponent-token. Nu peger `card.padding` på `inset` og `inset` på `space-32`, og derfor får kortet 32 px indvendig afstand. Opbygningen er den samme som ved farven.'},
+  {type:'pick',fixed:true,retry:true,example:true,tok:'card.padding',val:'{inset}',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:2,src:'fowler',why:'Lag gælder ikke kun farver. Navnet nævner en komponent og en egenskab ved den, og værdien er en reference til rollen `inset`. Det er et komponent-token. `inset` findes ikke endnu, så referencen peger på intet. Tokenet har derfor ingen værdi, og kortet ændrer sig ikke.'},
+  {type:'pick',fixed:true,retry:true,example:true,tok:'space-32',val:'32px',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:0,src:'curtis',why:'Navnet siger, hvor stor afstanden er, og intet om, hvor den bruges. Værdien er rå. Det er et primitivt token. `card.padding` peger på `inset` og ikke direkte på `space-32`, så kortet ændrer sig stadig ikke.',srcNote:'Nathan Curtis kalder sådanne tokens generiske. Hans eget eksempel er `$esds-space-2-x` for 32 px.'},
+  {type:'pick',fixed:true,retry:true,example:true,tok:'inset',val:'{space-32}',q:'Hvilket lag hører tokenet til?',options:TIERS,answer:1,src:'figmaTokens',why:'`inset` er afstanden mellem en flades kant og dens indhold. Navnet siger, hvad afstanden bruges til, ikke hvor stor den er, og værdien er en reference. Det er et semantisk token. Nu peger `card.padding` på `inset` og `inset` på `space-32`, og derfor får kortet 32 px indvendig afstand. Kæden virker, når alle referencer kan følges, uanset hvilken rækkefølge tokens blev oprettet i. `inset` er ét eksempel på et rollenavn, ikke en standard.'},
   {type:'repoint',tok:'accent',opts:['blue-900','grey-700'],vals:['#0265dc','#464646'],from:0,to:1,q:'Lad `accent` pege på `grey-700` i stedet for `blue-900`.',done:'Én reference er ændret. Komponenten er ikke rørt.',src:'figmaTokens',example:true,why:'`accent` har samme navn og samme rolle som før, og `button.primary.background` peger stadig på `accent`. Knappen har skiftet farve, fordi rollen nu får sin værdi fra `grey-700`. Bruger flere komponenter rollen, er det stadig kun én reference, der ændres.',srcNote:'`grey-700` er fra Andreas Kutschmanns artikel: `color.options.grey-700`.'}
  ]},
 {id:'navn',title:'Navnet',does:'Byg tokennavne af led, og se på tavlen, hvad hvert navn beskriver.',from:'Nathan Curtis og Andreas Kutschmann',min:5,
@@ -1793,9 +1794,9 @@ var HELP={
  'lag-0':['lag3','`blue-900` er trin 900 i en blå farveskala. Værdien er en farvekode.'],
  'lag-1':['lag3','Krøllede parenteser betyder, at værdien er en reference til et andet token. Her peger tokenet på `blue-900`.'],
  'lag-2':['lag3','Navnet læses fra venstre: `button`, så `primary`, så `background`. Værdien er en reference til `accent`.'],
- 'lag-3':['lag3','`space` er afstand, og `32` er størrelsen. Værdien er et mål i pixels.'],
- 'lag-4':['lag3','Inset er luften mellem en flades kant og dens indhold. Værdien er en reference til `space-32`.'],
- 'lag-5':['lag3','Navnet læses fra venstre: `card`, så `padding`. Værdien er en reference til `inset`.'],
+ 'lag-3':['lag3','Navnet læses fra venstre: `card`, så `padding`. Værdien er en reference til `inset`.'],
+ 'lag-4':['lag3','`space` er afstand, og `32` er størrelsen. Værdien er et mål i pixels.'],
+ 'lag-5':['lag3','Inset er luften mellem en flades kant og dens indhold. Værdien er en reference til `space-32`.'],
  'navn-0':['niveauer'],'navn-1':['niveauer'],'navn-2':['komplet'],'navn-3':['komplet'],'navn-4':['raekkefolge'],
  'format-0':['tokenGruppe'],'format-1':['type'],'format-2':['reference'],'format-3':['dimension'],'format-4':['reference'],
  'tema-0':['mode'],'tema-1':['mode'],'tema-2':['kontrast'],
@@ -1907,9 +1908,9 @@ TB.contentEN={
         {q:Q_LAYER,why:'The name says which color it is and nothing about where it is used. The value is raw: a color code, not a reference. A value without a purpose is a primitive token.',srcNote:'In the article the token is written `color.options.blue-900`.'},
         {q:Q_LAYER,why:'The name says what the value is used for, not which color it is. The value is a reference to a primitive token. A purpose that has been given a value is a semantic token. No component uses it yet.',srcNote:'In the article: `color.decisions.accent` points to `{color.options.blue-900}`.'},
         {q:Q_LAYER,why:'The name mentions one specific component and one specific part of it. The value is a reference to the role `accent`. A purpose applied in one specific place is a component token. Now the component points to the role and the role points to the value, and that is why the button gets its color.',srcNote:'In the article: `button.primary.background` points to `{color.decisions.accent}`.'},
-        {q:Q_LAYER,why:'Layers are not only about colors. The name says how large the space is and nothing about where it is used. The value is raw. This is a primitive token again.',srcNote:'Nathan Curtis calls tokens like this generic. His own example is `$esds-space-2-x` for 32 px.'},
-        {q:Q_LAYER,why:'`inset` is the space between the edge of a surface and its content. The name says what the space is used for, not how large it is, and the value is a reference. That makes it a semantic token. `inset` is one example of a role name, not a standard.'},
-        {q:Q_LAYER,why:'The name mentions a component and one of its properties, and the value is a reference to the role `inset`. That makes it a component token. Now `card.padding` points to `inset` and `inset` points to `space-32`, and that is why the card gets 32 px of padding. The structure is the same as for the color.'},
+        {q:Q_LAYER,why:'Layers are not only about colors. The name mentions a component and one of its properties, and the value is a reference to the role `inset`. That makes it a component token. `inset` does not exist yet, so the reference points to nothing. The token therefore has no value, and the card does not change.'},
+        {q:Q_LAYER,why:'The name says how large the space is and nothing about where it is used. The value is raw. This is a primitive token. `card.padding` points to `inset`, not directly to `space-32`, so the card still does not change.',srcNote:'Nathan Curtis calls tokens like this generic. His own example is `$esds-space-2-x` for 32 px.'},
+        {q:Q_LAYER,why:'`inset` is the space between the edge of a surface and its content. The name says what the space is used for, not how large it is, and the value is a reference. That makes it a semantic token. Now `card.padding` points to `inset` and `inset` points to `space-32`, and that is why the card gets 32 px of padding. The chain works once every reference can be followed, whatever order the tokens were created in. `inset` is one example of a role name, not a standard.'},
         {q:'Make `accent` point to `grey-700` instead of `blue-900`.',done:'One reference has changed. The component has not been touched.',why:'`accent` has the same name and the same role as before, and `button.primary.background` still points to `accent`. The button has changed color because the role now gets its value from `grey-700`. If several components use the role, it is still only one reference that changes.',srcNote:'`grey-700` is from the article by Andreas Kutschmann: `color.options.grey-700`.'}
       ]},
     navn:{title:'The name',does:'Build token names from segments, and see on the board what each name describes.',from:'Nathan Curtis and Andreas Kutschmann',
@@ -2004,9 +2005,9 @@ TB.contentEN={
     'lag-0':'`blue-900` is step 900 in a blue color scale. The value is a color code.',
     'lag-1':'Curly braces mean that the value is a reference to another token. Here the token points to `blue-900`.',
     'lag-2':'The name is read from the left: `button`, then `primary`, then `background`. The value is a reference to `accent`.',
-    'lag-3':'`space` is spacing, and `32` is the size. The value is a measurement in pixels.',
-    'lag-4':'Inset is the space between the edge of a surface and its content. The value is a reference to `space-32`.',
-    'lag-5':'The name is read from the left: `card`, then `padding`. The value is a reference to `inset`.'
+    'lag-3':'The name is read from the left: `card`, then `padding`. The value is a reference to `inset`.',
+    'lag-4':'`space` is spacing, and `32` is the size. The value is a measurement in pixels.',
+    'lag-5':'Inset is the space between the edge of a surface and its content. The value is a reference to `space-32`.'
   }
 };
 if(TB.content&&TB.content.setLang)TB.content.setLang(TB.i18n.lang);
@@ -2606,8 +2607,8 @@ TB.defaultStation=function(){
    and space-32 -> inset -> card.padding -> the card.
 
    THE PIPE IS THE REFERENCE. A pipe connects two layers only when a token on the upper one points at a token on the lower
-   one and both tokens have been put in place. A primitive on its own has no pipe. A value reaches the interface only when
-   its chain is whole. The state of the model is therefore nothing but: which tokens are placed, and what `accent` points to.
+   one and both tokens have been put in place. A primitive on its own has no pipe. A component token whose role is not in
+   place yet has a pipe that ends in the air: a reference to nothing. A value reaches the interface only when its chain is whole. The state of the model is therefore nothing but: which tokens are placed, and what `accent` points to.
 
    THE STRUCTURE SPEAKS MOTH. THE VALUE SPEAKS ITSELF. Decks, frame, tokens, pipes, tabs, lines and type are MOTH. Wherever the
    model shows a concrete token value, the value is drawn as what it is:
@@ -2628,7 +2629,9 @@ TB.defaultStation=function(){
    Play. A loose part (the token in question) waits to the left; three candidate paths lead to a place on each layer.
    On the wrong layer the part stops at the door, the layer is crossed out, and the part comes back: it stays loose.
    On the right layer it goes to its own place in its chain, the reference it carries becomes a pipe, and the value runs as
-   far as the chain now reaches. Three placements make a chain, and the third one changes the interface.
+   far as the chain now reaches. Three placements make a chain, and the one that makes it whole changes the interface.
+   The colour chain is built from the bottom; the spacing chain from the top (card.padding, space-32, inset), so the layers
+   are not asked in the same order twice and the chain is seen to work only once every reference can be followed.
 
    One reference moved. After the six placements a second primitive, grey-700, stands on the plinth with no pipe. The player
    moves the foot of the pipe under `accent` from blue-900 to grey-700. The blue draws back out of the chain into its ingot,
@@ -2651,6 +2654,9 @@ var SCW=4.9,SCH=2.8,SL=-0.5,SCX=SL+SCW/2,CX=0.65,CY=0.5,CW=3.6,CH=1.8,PADMAX=0.4
 var TAG='s1',DEMO='s1demo',FL='s1fl',XP='s1x',RP='s1rp',SB='s1send',DASH=[4,3];
 /* The tokens. Chain 0 is quoted from the source (see content.js); chain 1 is the teaching example. */
 var NAMES=[['blue-900','accent','button.primary.background'],['space-32','inset','card.padding']];
+/* the order of the level's six placements as [chain, layer] (see content.js), and whether a token is among the first n placed */
+var SEQ=[[0,0],[0,1],[0,2],[1,2],[1,0],[1,1]];
+function among(c,d,n){for(var j=0;j<n&&j<SEQ.length;j++)if(SEQ[j][0]===c&&SEQ[j][1]===d)return true;return false;}
 /* what the primitives hold, and the second colour primitive `accent` can be pointed at: it stands where a loose part would be placed */
 var PVAL=['#0265dc','32px'],ALT={name:'grey-700',val:'#464646',x:BX,w:2.0};
 /* the value speaks itself: the two colours, by what `accent` points at (0 blue-900, 1 grey-700). A thing that has the value
@@ -2817,20 +2823,23 @@ TB.stations[0]=(function(){
 
   /* ---------- layout: everything that depends on how far the layers are apart ---------- */
   function layoutParts(){
-    var yp=TH[2]+HN[2]+0.03+0.31;
+    /* the parts stand in front of the pipe, so the value goes up behind them and never across a face */
+    var yp=TH[2]+HN[2]+0.03+0.31,z=ZC+PR+0.22;
     /* the button's face stands off its background until the part is put together */
-    p0bg.position.set(NX[0][2],yp,ZC-0.14);
-    p0face.position.set(NX[0][2],yp,ZC-0.14+0.066+0.4*(1-cs[0].asm));
+    p0bg.position.set(NX[0][2],yp,z-0.14);
+    p0face.position.set(NX[0][2],yp,z-0.14+0.066+0.4*(1-cs[0].asm));
     /* the card's frame stands off its content by the padding */
     var p=0.02+0.14*cs[1].asm;
-    p1frame.position.set(NX[1][2],yp,ZC-0.1);p1frame.scale.set(0.9+2*p,0.3+2*p,0.05);
-    p1content.position.set(NX[1][2],yp,ZC-0.04);
+    p1frame.position.set(NX[1][2],yp,z-0.1);p1frame.scale.set(0.9+2*p,0.3+2*p,0.05);
+    p1content.position.set(NX[1][2],yp,z-0.04);
   }
   /* A pipe is there when its reference is: the token that points and the token pointed at are both in place.
      The stretch across the tile belongs to the tile, the stretch inside the part is not drawn. */
   function layPipe(c){
     var s=cs[c],p=path(c),k0=s.k[0],a=k0&&p[0].distanceTo(p[1])>0.001?k0:0,b=k0&&p[1].distanceTo(p[2])>0.001?k0:0;
-    var vis=[a,b,k0,s.n[1],s.k[1],0,s.k[2]],col=tier(c)===0?pal.borderStrong:pal.slate,d;
+    /* a component token without its role: the pipe goes down from the part and ends in the air where the role would stand */
+    var down=s.k[1]||(s.n[1]?0:s.n[2]);
+    var vis=[a,b,k0,s.n[1],down,0,s.k[2]],col=tier(c)===0?pal.borderStrong:pal.slate,d;
     for(d=0;d<7;d++)pipe[c].show(d,vis[d]>0);
     pvis[c]=vis;
     pipe[c].set(p);
@@ -2981,12 +2990,12 @@ TB.stations[0]=(function(){
      below and both are there. A chain that is whole has delivered its value: the part is made and the interface has changed. */
   function fromState(){
     [0,1].forEach(function(c){
-      var b=c*3,s=cs[c],n0=placed>b,n1=placed>b+1,n2=placed>b+2;
+      var s=cs[c],n0=among(c,0,placed),n1=among(c,1,placed),n2=among(c,2,placed),whole=n0&&n1&&n2;
       s.n=[n0?1:0,n1?1:0,n2?1:0];
-      s.k=[n1?1:0,n2?1:0,n2?1:0];
-      s.on=false;s.d=-1;s.run=false;s.part=n2;s.asm=n2?1:0;
+      s.k=[n0&&n1?1:0,n1&&n2?1:0,whole?1:0];
+      s.on=false;s.d=-1;s.run=false;s.part=whole;s.asm=whole?1:0;
     });
-    mon.btn=placed>=3;mon.ref=ref;mon.pad=placed>=6?1:0;mon.band=false;mon.focus=-1;mon.tr=[false,false];recede=false;
+    mon.btn=cs[0].k[2]>0;mon.ref=ref;mon.pad=cs[1].k[2]?1:0;mon.band=false;mon.focus=-1;mon.tr=[false,false];recede=false;
     fx=footX(ref);lift=0;srcI=ref;
   }
   /* the rule on the pipe of the length chain, from its ingot to the distance d: a line on the face of the pipe, a mark every RSTEP */
@@ -3075,22 +3084,25 @@ TB.stations[0]=(function(){
     if(c===0)mon.btn=false;else{mon.pad=0;mon.band=false;}
   }
 
-  /* Token j of the level has just been placed (0..5: three for the colour chain, three for the spacing chain).
-     It is in ink for a moment. A primitive stands alone. A token that points at one below it brings its pipe, and the value
-     runs as far as the chain now reaches: across the tile for a semantic token, into the interface for a component token.
+  /* Token j of the level has just been placed (SEQ[j]: three for the colour chain, three for the spacing chain).
+     It is in ink for a moment, with the pipes it has just made. A primitive stands alone, and so does a component token whose
+     role is not there yet: its pipe ends in the air. When a primitive now holds a value that can go somewhere, the value runs
+     as far as the chain reaches: across the tile while the chain is open, into the interface when it is whole.
      While it runs, the rest of the model steps back. */
   function built(j){
     K.clear(FL);tok.visible=false;
-    var c=j<3?0:1,d=j%3,s=cs[c];
+    var c=SEQ[j][0],d=SEQ[j][1],s=cs[c];
     fromState();
     s.n[d]=2;
-    if(d>0)s.k[d-1]=2;
-    if(d===2)s.k[2]=2;
-    if(d===0){show();K.after(1.4,function(){fromState();show();},FL);return;}
-    if(d===2)before(c);
+    if(s.k[0]&&d<2)s.k[0]=2;
+    if(s.k[1]&&d>0)s.k[1]=2;
+    var whole=s.k[2]>0;
+    if(whole)s.k[2]=2;
+    if(!whole&&s.k[0]!==2){show();K.after(1.4,function(){fromState();show();},FL);return;}
+    if(whole)before(c);
     recede=true;s.on=true;s.d=0;s.run=true;mon.focus=c;
     show();
-    K.after(0.3,function(){flow(c,d===2?END:ACROSS,3.0,FL,function(){K.after(d===2?1.6:1.0,function(){fromState();show();},FL);});},FL);
+    K.after(0.3,function(){flow(c,whole?END:ACROSS,3.0,FL,function(){K.after(whole?1.6:1.0,function(){fromState();show();},FL);});},FL);
   }
 
   /* ---------- one reference, moved ---------- */
@@ -3218,8 +3230,8 @@ TB.stations[0]=(function(){
       /* in place, the part is one more thing on its layer. In the level it is the token the model was waiting for: it goes on
          to its own place in its chain, and what it points at becomes a pipe. */
       part.setEdge(pal.slate);
-      var j=placed,c=j<3?0:1;
-      if(inLevel&&ok&&j<6&&j%3===d&&NAMES[c][d]===R.tok){
+      var j=placed,c=j<6?SEQ[j][0]:0;
+      if(inLevel&&ok&&j<6&&SEQ[j][1]===d&&NAMES[c][d]===R.tok){
         K.after(0.5,function(){K.travel(part,[V(NX[c][d],top(d)+BH/2,ZC)],0.8,function(){part.visible=false;partOn=false;placed=j+1;built(j);},TAG);},TAG);
       }else K.after(0.5,function(){fromState();show();},TAG);
     }
